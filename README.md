@@ -2,7 +2,7 @@
 Modialog - jQuery Plugin for modal dialogs
 =
 
-The main purpose of this plugin is to provide a way to create modal dialogs in a simple and straightforward way without resorting to jQueryUI or other, more powerful but [bigger and complex plugins]. It has some unique characteristics too :)
+The main purpose of this plugin is to provide a way to create modal dialogs in a simple and straightforward way without resorting to jQueryUI or other, more powerful but [bigger and complex plugins]. Modialog weights only 3KB and has some unique features too :)
 
 Author
 -
