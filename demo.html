@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Modialog examples</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <style type="text/css">
+    
+    body {
+      font-family: sans-serif;
+    }
+    
+    #dialog {
+      display: none;
+      width: 300px;
+      background-color: white;
+      border: 3px solid black;
+      border-radius: 5px;
+    }
+    
+    #dialog .content {
+      padding: 20px;
+    }
+    
+    .modialog-caption {
+      height: 20px;
+      background-color: black;
+    }
+    
+    .modialog-icon {
+      color: white;
+      width: 1em;
+      height: 1em;
+      float: right;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .modialog-overlay {
+      background-color: #AAA;
+    }    
+    </style>
+  </head>
+
+  <body>
+    
+    <a id="open" href="#">Opens a popup</a>
+  
+    <div id="dialog">
+      <div class="content">
+        Please wait 3 seconds...
+      </div>
+    </div>
+    
+    <script src="jquery.modialog.js"></script>
+
+    <script>
+    
+    var $dlg = $('#dialog');
+    
+    $dlg.modialog({
+      
+      closeWithEsc: false,
+      
+      onBeforeClose: function() {
+        return confirm("Are you sure?");
+      },
+        
+      onOpen: function() {
+        var $dlg = this;
+        setTimeout(function() {
+          $dlg.find('.content').html("Thank you!");
+        }, 3000)
+      },
+      
+      onClose: function() {
+      }
+
+    });
+    
+    $('#open').click(function() {
+      $dlg.modialog('open');
+      return false;
+    });
+    
+    </script>
+    
+  </body>
+</html>
