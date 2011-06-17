@@ -16,7 +16,7 @@ Features
 Demo
 -
 
-[Demo page] (with a link to open a dialog box)
+[Demo page] with a link to open a dialog box
 
 Usage
 -
@@ -91,7 +91,7 @@ Here is a list of hints that I borrowed from Simplemodal, a [similar, bigger plu
 - To prevent Flash objects from "bleeding through" the dialog, make sure to set the wmode property for your object and embed elements to either opaque or transparent (reference).
 - For YouTube videos (and perhaps other objects), add type="application/x-shockwave-flash" in the object tag to prevent issues in IE6. Tip provided by Jimish Shah.
 
-[demo]: demo.html
+[Demo page]: demo.html
 [similar, bigger plugin]: http://www.ericmmartin.com/projects/simplemodal/
 [bigger and complex plugins]: https://itswadesh.wordpress.com/2011/04/13/15-jquery-popup-modal-dialog-plugins-and-tutorials/
 
