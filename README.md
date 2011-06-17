@@ -14,7 +14,7 @@ Features
 
 - **very small**, less than 5KB even when not minimized
 - **callbacks**, to be added to the "close", "beforeClose" and "open" event
-- **follows window resizes**, so the dialogs will always be centered
+- **follows window resizes**, so the dialogs will always stay centered
 - **offsets from origin**, so you can adapt the position of the dialog starting from the center
 - **DIY**, the HTML and the CSS is all on you. Modialog only needs a DIV
 
