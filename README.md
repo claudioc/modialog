@@ -109,7 +109,7 @@ Dual licensed under the MIT and GPL licenses:
   http://www.opensource.org/licenses/mit-license.php
   http://www.gnu.org/licenses/gpl.html
   
-[demo.html]: https://github.com/claudioc/modialog/blob/master/demo.html
+[demo.html]: http://claudioc.github.com/modialog/demo.html
 [Demo page]: demo.html
 [similar, bigger plugin]: http://www.ericmmartin.com/projects/simplemodal/
 [bigger and complex plugins]: https://itswadesh.wordpress.com/2011/04/13/15-jquery-popup-modal-dialog-plugins-and-tutorials/
