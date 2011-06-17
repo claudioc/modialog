@@ -43,7 +43,7 @@ A complete dialog (with the markup added by Modialog) will then be:
       <div class="content"></div>
     </div>
 
-**Add a CSS**: a minimal CSS is really needed for the dialog to work as intended. Please take a look at the provided [demo.html] for an actual example.
+**Add a CSS**: a minimal CSS is really needed for the dialog to work as intended. Please take a look at the source code of the provided [demo.html] for an actual example.
 
 Now use JavaScript to initialize the plugin and open the dialog (three examples follows)
 
