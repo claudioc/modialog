@@ -4,6 +4,11 @@ Modialog - jQuery Plugin for modal dialogs
 
 The main purpose of this plugin is to provide a way to create modal dialogs in a simple and straightforward way without resorting to jQueryUI or other, more powerful but [bigger and complex plugins]. It has some unique characteristics too :)
 
+Author
+-
+
+Claudio Cicali <claudio.cicali@gmail.com>
+
 Features
 -
 
@@ -27,20 +32,20 @@ In your layout create an hidden DIV to use as the Modialog container
 
     <div id="dialog"></div>
 
-Modialog automatically injects some HTML elements in your DIV (for the caption and the close icon). You then probably need another wrapper inside the dialog (i.e.: for padding). Something like:
+Modialog automatically injects some HTML elements in your DIV (for the caption and the close icon). You then probably need another wrapper inside the dialog (i.e.: for padding). Something like this:
 
     <div id="dialog"><div class="content"></div></div>
 
-A complete dialog (with the added markup) will then be:
+A complete dialog (with the markup added by Modialog) will then be:
 
     <div id="dialog">
       <div class="modialog-caption"><div class="modialog-icon"></div></div>
       <div class="content"></div>
     </div>
 
-A minimal CSS is really needed for the dialog to work as intended. Please take a look at the provided modialog.css for an actual example.
+**Add a CSS**: a minimal CSS is really needed for the dialog to work as intended. Please take a look at the provided [demo.html] for an actual example.
 
-Now use JavaScript to initiate the plugin and open the dialog
+Now use JavaScript to initialize the plugin and open the dialog (three examples follows)
 
     // Example 1: With no configuration at all
     $('#dialog').modialog();
@@ -63,18 +68,21 @@ Now use JavaScript to initiate the plugin and open the dialog
     });
     $('#dialog').modialog('open');
     
+    // Example 4: programmatically closing the dialog
+    $('#dialog').modialog('close');
+    
 Options
 -
 
-Note: every callback receives "this" as the dialog itself (as a jQuery object)
+**Important**: every callback receives "this" as the dialog itself as a jQuery object.
 
-- **onBeforeClose**, *function*: fired just before closing the dialog. If the callback will return false, the dialog will not be closed (there is no onBeforeOpen)
+- **onBeforeClose**, *function*: fired just before closing the dialog. If the callback will return false, the dialog will not be closed. There is no onBeforeOpen
 - **onOpen**, *function*: fired after the dialog has been opened. You can use this callback to fill the content of the dialog with an Ajax call, maybe prefilling it with a "Please wait" too
 - **onClose**, *function*: fired when the dialog has been closed
-- **closeWithEsc**, *boolean*: wheater or not the KEY would close the dialog (default: false)
-- **icon**, *string*: what to use as the close icon. Use '' for no icon (default: the letter X)
-- **offsetTop**, *integer*: offset in pixels from the (computed) top position of the dialog
-- **offsetLeft**, *integer*: offset in pixels from the (computed) left position of the dialog
+- **closeWithEsc**, *boolean*: whether or not the KEY would close the dialog (default: false)
+- **icon**, *string*: what to be used as the close icon. Use '' (the empty string) for no icon (default: the letter X)
+- **offsetTop**, *integer*: offset in pixels from the (computed) top position of the dialog (default: 0)
+- **offsetLeft**, *integer*: offset in pixels from the (computed) left position of the dialog (default: 0)
 
 Compatibility, limits and hints
 -
@@ -91,6 +99,17 @@ Here is a list of hints that I borrowed from Simplemodal, a [similar, bigger plu
 - To prevent Flash objects from "bleeding through" the dialog, make sure to set the wmode property for your object and embed elements to either opaque or transparent (reference).
 - For YouTube videos (and perhaps other objects), add type="application/x-shockwave-flash" in the object tag to prevent issues in IE6. Tip provided by Jimish Shah.
 
+License
+-
+
+Copyright (c) 2011 Claudio Cicali
+
+Dual licensed under the MIT and GPL licenses:
+
+  http://www.opensource.org/licenses/mit-license.php
+  http://www.gnu.org/licenses/gpl.html
+  
+[demo.html]: https://github.com/claudioc/modialog/blob/master/demo.html
 [Demo page]: demo.html
 [similar, bigger plugin]: http://www.ericmmartin.com/projects/simplemodal/
 [bigger and complex plugins]: https://itswadesh.wordpress.com/2011/04/13/15-jquery-popup-modal-dialog-plugins-and-tutorials/
