@@ -45,7 +45,7 @@ A complete dialog (with the markup added by Modialog) will then be:
 
 **Add a CSS**: a minimal CSS is really needed for the dialog to work as intended. Please take a look at the source code of the provided [demo.html] for an actual example.
 
-Now use JavaScript to initialize the plugin and open the dialog (three examples follows)
+Now use JavaScript to initialize the plugin and open the dialog. You will call modialog with (or without) a configuration literal object and then call it with a command (as "open" or "close") (some examples follows)
 
     // Example 1: With no configuration at all
     $('#dialog').modialog();
@@ -70,6 +70,15 @@ Now use JavaScript to initialize the plugin and open the dialog (three examples 
     
     // Example 4: programmatically closing the dialog
     $('#dialog').modialog('close');
+
+Commands
+-
+
+- **open**: opens the dialog
+- **close**: closes the dialog
+- **center**: re-center the dialog in the viewport (use it if you programmatically change the dialog content. See the [demo.html])
+- **lock**: disables closing (see *locked* option below)
+- **unlock**: enable closing
     
 Options
 -
@@ -80,7 +89,10 @@ Options
 - **onOpen**, *function*: fired after the dialog has been opened. You can use this callback to fill the content of the dialog with an Ajax call, maybe prefilling it with a "Please wait" too
 - **onClose**, *function*: fired when the dialog has been closed
 - **closeWithEsc**, *boolean*: whether or not the KEY would close the dialog (default: false)
+- **closeWithClick**, *boolean*: whether or not the dialog would be closed clicking outside it (default: false)
+- **title**, *string*: a string to be placed in the caption as the dialog title (default: '')
 - **icon**, *string*: what to be used as the close icon. Use '' (the empty string) for no icon (default: the letter X)
+- **locked**, *boolean*: a locked dialog box cannot be closed. It can be closed programmatically (default: false)
 - **offsetTop**, *integer*: offset in pixels from the (computed) top position of the dialog (default: 0)
 - **offsetLeft**, *integer*: offset in pixels from the (computed) left position of the dialog (default: 0)
 

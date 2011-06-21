@@ -1,6 +1,6 @@
 
 /*
-* jQuery Modialog plugin 1.0
+* jQuery Modialog plugin 1.1
 *
 * Copyright (c) 2011 Claudio Cicali <claudio.cicali@gmail.com
 *
@@ -12,59 +12,92 @@
 
 ;(function($) {
 
-  var $overlay
-    , options = {
-        // Close the dialog with the ESC key?
+  var $overlay = null
+    , defaults = {
         closeWithEsc: false
+      , closeWithClick: false
+      , locked: false
       , icon: 'X'
+      , title: ''
       , offsetTop: 0
       , offsetLeft: 0
     }
     , $cbar
     , $icon
-    , haveChrome = false;
+    , $current = null    // Remember the current opened dialog
 
   var methods = {
     
     init: function(settings) {
       
-      $cbar = $('<div class="modialog-caption"/>');
-      $icon = $('<div class="modialog-icon">' + options.icon + '</div>');
-      
       settings = settings || {};
 
+      var options = {};
+
+      $.extend(options, defaults);
       $.extend(options, settings);
 
-      /* Create an overlay to use as matte */
-      $overlay = $('<div/>').css({
-          'display': 'none'
-        , 'position': 'fixed'
-        , 'top': 0
-        , 'left': 0
-        , 'opacity': 0.6
-        , 'z-index': '1000'
-      })
-      .addClass('modialog-overlay')
-      .appendTo('body')
-      .click(function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        return false;
-      })
+      this.data('modialogOptions', options);
+      this.data('modialogContent', this.html());
+      
+      if (!$overlay) {
+        $overlay = $('<div/>').css({
+            'display': 'none'
+          , 'position': 'fixed'
+          , 'top': 0
+          , 'left': 0
+          , 'opacity': 0.6
+          , 'z-index': '1000'
+        })
+        .addClass('modialog-overlay')
+        .appendTo('body')
+        .click(function(e) {
+          e.stopPropagation();
+          e.preventDefault();
+          close();
+          return false;
+        })
+      }
+    },
+    
+    center: function() {
+      if (!this.is(':visible')) {
+        return;
+      }
+      relocate(this);
+    },
+
+    lock: function() {
+      var options = this.data('modialogOptions');
+      options.locked = true;
+      this.data('modialogOptions', options);
+    },
+    
+    unlock: function() {
+      var options = this.data('modialogOptions');
+      options.locked = false;
+      this.data('modialogOptions', options);
     },
     
     open: function() {
       
-      var $dlg = this;
-      
+      var $dlg = this
+        , options = this.data('modialogOptions');
+
       if (this.is(':visible')) {
         return;
       }
+      
+      if ($current) {
+        close($current);
+      }
+      
+      $current = $dlg;
 
       if (options.closeWithEsc) {
         $(window).bind('keypress.modialog', function(evt) {
           if (27 == evt.keyCode) {
-            if (false === trigger('onBeforeClose')) {
+            if (false === trigger('onBeforeClose', $dlg)) {
               return;
             }
             close($dlg);
@@ -76,16 +109,20 @@
         relocate($dlg);
       });
 
-      if (!haveChrome) {
-        /* Create the title bar */
-        $cbar.prependTo(this);
+      $cbar = $('<div class="modialog-caption"/>');
+      if (options.title != '') {
+        $cbar.html(options.title);
+      }
+      $cbar.prependTo(this);
+
+      if (!options.locked) {
+        $icon = $('<div class="modialog-icon">' + options.icon + '</div>');
         $icon.appendTo($cbar).click(function() {
-          if (false === trigger('onBeforeClose')) {
+          if (false === trigger('onBeforeClose', $dlg)) {
             return;
           }
           close($dlg);
         });
-        haveChrome = true;
       }
 
       relocate($dlg);
@@ -99,7 +136,7 @@
     
     close: function() {
       if (this.is(':visible')) {
-        close(this);
+        close(this, true);
       }
       return this;
     }
@@ -107,23 +144,48 @@
   }
 
   function trigger(cb, $dlg) {
+    var options = $dlg.data('modialogOptions');
     if ($.isFunction(options[cb])) {
       return options[cb].apply($dlg);
     }
     return null;
   }
   
-  function close($dlg) {
+  function close($dlg, force) {
+    if (!$dlg && !$current) {
+      return;
+    }
+
+    if (!$dlg && $current) {
+      
+      // We use $current when clicking on the overlay
+      if (!$current.data('modialogOptions').closeWithClick) {
+        return;
+      }
+    }
+    
+    $dlg = $dlg ? $dlg : $current;
+
+    var options = $dlg.data('modialogOptions');
+    
+    if (!force && options.locked) {
+      return
+    }
+    
     if (options.closeWithEsc) {
       $(window).unbind('keypress.modialog');
     }
     $(window).unbind('resize.modialog');
     $overlay.hide();
     $dlg.hide();
+    $dlg.html($dlg.data('modialogContent'));
+    
+    $current = null;
     trigger('onClose', $dlg);
   }
 
   function relocate($dlg) {
+    var options = $dlg.data('modialogOptions');
     /* Need to hide the overlay first, or the document size would be fooled */
     $overlay.hide().css({'width': $(window).width(),'height': $(window).height()}).show();
     $dlg.css({
@@ -135,12 +197,14 @@
   }
   
   $.fn.modialog = function(method) {
-    if ( methods[method] ) {
+    if ($.isFunction( methods[method] )) {
       return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
-    } else if ( typeof method === 'object' || !method ) {
-      return methods.init.apply( this, arguments );
     } else {
-      $.error( 'Method ' +  method + ' does not exist on jQuery.modialog' );
+      if ($.isPlainObject(method) || typeof method == 'undefined') {
+        return methods.init.apply( this, arguments );
+      } else {
+        $.error( 'Method ' +  method + ' does not exist on jQuery.modialog' );
+      }
     }
   }
 

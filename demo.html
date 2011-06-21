@@ -4,13 +4,14 @@
     <meta charset="utf-8">
     <title>Modialog examples</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script src="jquery.modialog.min.js"></script>
     <style type="text/css">
     
     body {
       font-family: sans-serif;
     }
     
-    #dialog {
+    .dialog {
       display: none;
       width: 300px;
       background-color: white;
@@ -18,11 +19,12 @@
       border-radius: 5px;
     }
     
-    #dialog .content {
+    .dialog .content {
       padding: 20px;
     }
     
     .modialog-caption {
+      color: white;
       height: 20px;
       background-color: black;
     }
@@ -43,33 +45,60 @@
   </head>
 
   <body>
-    
-    <a id="open" href="#">Opens a popup</a>
+
+    <p>
+    <a id="open0" href="#">Opens a very basic popup</a>
+    <div id="dialog0" class="dialog">
+      <div class="content">Hello!</div>
+    </div>
+    </p>
   
-    <div id="dialog">
+    <p>
+    <a id="open01" href="#">Opens a very basic popup with a title</a>
+    <div id="dialog01" class="dialog">
+      <div class="content">Hello!</div>
+    </div>
+    </p>
+  
+    <p>
+    <a id="open1" href="#">Opens a LOCKED popup (closes in 3 seconds)</a>
+    <div id="dialog1" class="dialog">
       <div class="content">
         Please wait 3 seconds...
       </div>
     </div>
+    </p>
     
-    <script src="jquery.modialog.min.js"></script>
-
+    <p>
+    <a id="open2" href="#">Opens a popup with a long content and close confirmation</a>
+    <div id="dialog2" class="dialog">
+      <div class="content">
+      Please wait
+      </div>
+    </div>
+    </p>
+    
     <script>
+
+    var $dlg0 = $('#dialog0');
+    $dlg0.modialog();
     
-    var $dlg = $('#dialog');
+    var $dlg01 = $('#dialog01');
+    $dlg01.modialog({title: "I'm a dialog box", closeWithClick: true});
     
-    $dlg.modialog({
+    var $dlg1 = $('#dialog1');
+    
+    $dlg1.modialog({
       
-      closeWithEsc: false,
+      locked: true,
       
-      onBeforeClose: function() {
-        return confirm("Are you sure?");
-      },
-        
       onOpen: function() {
         var $dlg = this;
         setTimeout(function() {
           $dlg.find('.content').html("Thank you!");
+          setTimeout(function() {
+            $dlg.modialog('close');
+          }, 1000);
         }, 3000)
       },
       
@@ -77,9 +106,53 @@
       }
 
     });
+
+    var $dlg2 = $('#dialog2');
     
-    $('#open').click(function() {
-      $dlg.modialog('open');
+    $dlg2.modialog({
+        
+      onBeforeClose: function() {
+        return confirm("Are you sure?");
+      },
+        
+      onOpen: function() {
+        var $dlg = this;
+        setTimeout(function() {
+          $dlg.find('.content').html("\
+<p>Some paragraph</p>\
+<p>Some paragraph</p>\
+<p>Some paragraph</p>\
+<p>Some paragraph</p>\
+<p>Some paragraph</p>\
+<p>Some paragraph</p>\
+<p>Some paragraph</p>\
+<p>Some paragraph</p>\
+<p>Some paragraph</p>\
+<p>Some paragraph</p>\
+<p>Some paragraph</p>\
+<p>Some paragraph</p>\
+<p>Some paragraph</p>\
+")
+          $dlg.modialog('center');
+        }, 1000)
+      },
+      
+    });
+    
+    $('#open0').click(function() {
+      $dlg0.modialog('open');
+      return false;
+    });
+    $('#open01').click(function() {
+      $dlg01.modialog('open');
+      return false;
+    });
+    $('#open1').click(function() {
+      $dlg1.modialog('open');
+      return false;
+    });
+    $('#open2').click(function() {
+      $dlg2.modialog('open');
       return false;
     });
     
