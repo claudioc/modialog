@@ -16,6 +16,7 @@ Features
 - **callbacks**, to be added to the "close", "beforeClose" and "open" event
 - **follows window resizes**, so the dialogs will always stay centered
 - **offsets from origin**, so you can adapt the position of the dialog starting from the center
+- **multiple instances**, so you can have more that one popup defined in your page
 - **DIY**, the HTML and the CSS is all on you. Modialog only needs a DIV
 
 Demo
@@ -44,6 +45,7 @@ A complete dialog (with the markup added by Modialog) will then be:
     </div>
 
 **Add a CSS**: a minimal CSS is really needed for the dialog to work as intended. Please take a look at the source code of the provided [demo.html] for an actual example.
+You need at the very least to style the .modialog-overlay (give it a background-color)
 
 Now use JavaScript to initialize the plugin and open the dialog. You will call modialog with (or without) a configuration literal object and then call it with a command (as "open" or "close") (some examples follows)
 
@@ -51,7 +53,7 @@ Now use JavaScript to initialize the plugin and open the dialog. You will call m
     $('#dialog').modialog();
     $('#dialog').modialog('open');
 
-    // Example 2: Setting up a callback
+    // Example 2: Setting up a callback for the "beforeClose" event. Request confirmation to the user
     $('#dialog').modialog({
        onBeforeClose: function() {
          return confirm("Are you sure?");
@@ -70,12 +72,45 @@ Now use JavaScript to initialize the plugin and open the dialog. You will call m
     
     // Example 4: programmatically closing the dialog
     $('#dialog').modialog('close');
+    
+    // Example 5: close the dialog, executing a callback AFTER
+    $('#dialog').modialog('close', function() {
+      alert("Dialog has been just closed");
+    });
+    
+    // Example 6: fill the body of the dialog upon opening it
+    $('#dialog').modialog('open', {
+      // "this" is the dialog jQuery object
+      this.html("I'm the <em>body</em> of the dialog");
+    });
+
+    // Example 7: fill the body of the dialog upon opening it, via ajax
+    $('#dialog').modialog('open', function() {
+      // "this" is the dialog jQuery object
+      this.find('.content').load('content.php', function() {
+        // "this" is the dialog jQuery object.
+        this.modialog('center')
+        ...
+      })
+    });
+    
+    // Example 8: fill the body of the dialog via ajax and opens it using the "load" command
+    // (equivalent to example 7, but shorter)
+    App.$.dialog.modialog('load', '.content', "content.php", function() {
+       // The dialog is automatically opened and centered
+    });
+
+    // Example 9: programmatically change a property just before opening it
+    $('#dialog').modialog('set', {offsetTop: 0});
+    $('#dialog').modialog('open');
 
 Commands
 -
 
 - **open**: opens the dialog
 - **close**: closes the dialog
+- **load**: load the content via AJAX, then opens and center
+- **set**: set properties
 - **center**: re-center the dialog in the viewport (use it if you programmatically change the dialog content. See the [demo.html])
 - **lock**: disables closing (see *locked* option below)
 - **unlock**: enable closing
@@ -86,7 +121,6 @@ Options
 **Important**: every callback receives "this" as the dialog itself as a jQuery object.
 
 - **onBeforeClose**, *function*: fired just before closing the dialog. If the callback will return false, the dialog will not be closed. There is no onBeforeOpen
-- **onOpen**, *function*: fired after the dialog has been opened. You can use this callback to fill the content of the dialog with an Ajax call, maybe prefilling it with a "Please wait" too
 - **onClose**, *function*: fired when the dialog has been closed
 - **closeWithEsc**, *boolean*: whether or not the KEY would close the dialog (default: false)
 - **closeWithClick**, *boolean*: whether or not the dialog would be closed clicking outside it (default: false)

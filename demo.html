@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Modialog examples</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
     <script src="jquery.modialog.min.js"></script>
     <style type="text/css">
     
@@ -40,7 +40,16 @@
     
     .modialog-overlay {
       background-color: #AAA;
-    }    
+    }
+
+    .dialog.cool {
+      background-color: black;
+      font-size: 120%;
+      font-weight: bold;
+      color: white;
+      text-align: center;
+    }
+    
     </style>
   </head>
 
@@ -77,6 +86,15 @@
       </div>
     </div>
     </p>
+
+    <p>
+    <a id="open3" href="#">No caption, no icon, super cool</a>
+    <div id="dialog3" class="dialog cool">
+      <div class="content">
+      I'm white on black...<br>Now wait 3 seconds
+      </div>
+    </div>
+    </p>
     
     <script>
 
@@ -89,10 +107,35 @@
     var $dlg1 = $('#dialog1');
     
     $dlg1.modialog({
-      
       locked: true,
-      
-      onOpen: function() {
+    });
+
+    var $dlg2 = $('#dialog2');
+
+    var $dlg3 = $('#dialog3');
+    $dlg3.modialog({
+      icon: ''
+    });
+    
+    
+    $dlg2.modialog({
+      onBeforeClose: function() {
+        return confirm("Are you sure?");
+      },
+    });
+    
+    $('#open0').click(function() {
+      $dlg0.modialog('open');
+      return false;
+    });
+    
+    $('#open01').click(function() {
+      $dlg01.modialog('open');
+      return false;
+    });
+    
+    $('#open1').click(function() {
+      $dlg1.modialog('open', function() {
         var $dlg = this;
         setTimeout(function() {
           $dlg.find('.content').html("Thank you!");
@@ -100,22 +143,12 @@
             $dlg.modialog('close');
           }, 1000);
         }, 3000)
-      },
-      
-      onClose: function() {
-      }
-
+      });
+      return false;
     });
-
-    var $dlg2 = $('#dialog2');
     
-    $dlg2.modialog({
-        
-      onBeforeClose: function() {
-        return confirm("Are you sure?");
-      },
-        
-      onOpen: function() {
+    $('#open2').click(function() {
+      $dlg2.modialog('open', function() {
         var $dlg = this;
         setTimeout(function() {
           $dlg.find('.content').html("\
@@ -135,27 +168,19 @@
 ")
           $dlg.modialog('center');
         }, 1000)
-      },
+      });
+      return false;
+    });
+
+    $('#open3').click(function() {
+      $dlg3.modialog('open', function() {
+        var $dlg = this;
+        setTimeout(function() {
+          $dlg.modialog('close');
+        }, 3000)
+      });
+    })
       
-    });
-    
-    $('#open0').click(function() {
-      $dlg0.modialog('open');
-      return false;
-    });
-    $('#open01').click(function() {
-      $dlg01.modialog('open');
-      return false;
-    });
-    $('#open1').click(function() {
-      $dlg1.modialog('open');
-      return false;
-    });
-    $('#open2').click(function() {
-      $dlg2.modialog('open');
-      return false;
-    });
-    
     </script>
     
   </body>

@@ -1,6 +1,6 @@
 
 /*
-* jQuery Modialog plugin 1.1
+* jQuery Modialog plugin 1.2
 *
 * Copyright (c) 2011 Claudio Cicali <claudio.cicali@gmail.com
 *
@@ -60,6 +60,18 @@
       }
     },
     
+    set: function(overrides) {
+      
+      var options = this.data('modialogOptions');
+      
+      for (key in overrides) {
+        options[key] = overrides[key];
+      }
+      
+      this.data('modialogOptions', options);
+      
+    },
+    
     center: function() {
       if (!this.is(':visible')) {
         return;
@@ -79,7 +91,19 @@
       this.data('modialogOptions', options);
     },
     
-    open: function() {
+    load: function(sel, url, cb) {
+      
+      var $dlg = this;
+      
+      $dlg.find(sel).load(url, function() {
+        $dlg.modialog('open');
+        $dlg.modialog('center')
+        cb && cb.apply($dlg);
+      })
+      
+    },
+    
+    open: function(cb) {
       
       var $dlg = this
         , options = this.data('modialogOptions');
@@ -109,13 +133,15 @@
         relocate($dlg);
       });
 
-      $cbar = $('<div class="modialog-caption"/>');
-      if (options.title != '') {
-        $cbar.html(options.title);
+      if (options.title != '' || options.icon != '') {
+        $cbar = $('<div class="modialog-caption"/>');
+        if (options.title != '') {
+          $cbar.html(options.title);
+        }
+        $cbar.prependTo(this);
       }
-      $cbar.prependTo(this);
 
-      if (!options.locked) {
+      if (!options.locked && options.icon != '' && $cbar) {
         $icon = $('<div class="modialog-icon">' + options.icon + '</div>');
         $icon.appendTo($cbar).click(function() {
           if (false === trigger('onBeforeClose', $dlg)) {
@@ -129,7 +155,7 @@
 
       this.show();
       
-      trigger('onOpen', this);
+      cb && cb.apply($dlg);
       
       return this;
     },
@@ -151,7 +177,7 @@
     return null;
   }
   
-  function close($dlg, force) {
+  function close($dlg, force, cb) {
     if (!$dlg && !$current) {
       return;
     }
@@ -182,16 +208,18 @@
     
     $current = null;
     trigger('onClose', $dlg);
+    cb && cb.apply($dlg);
   }
 
   function relocate($dlg) {
     var options = $dlg.data('modialogOptions');
     /* Need to hide the overlay first, or the document size would be fooled */
     $overlay.hide().css({'width': $(window).width(),'height': $(window).height()}).show();
+    var top = 0|($(document).scrollTop() + (($(window).height() - $dlg.height()) / 2)) + options.offsetTop;
     $dlg.css({
       'z-index': '1001',
       'position': 'absolute',
-      'top': 0|($(document).scrollTop() + (($(window).height() - $dlg.height()) / 2)) + options.offsetTop,
+      'top': top < 0 ? 0 : top,
       'left': 0|(($(window).width() - $dlg.width()) / 2) + options.offsetLeft
     });
   }
