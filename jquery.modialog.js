@@ -1,6 +1,6 @@
 
 /*
-* jQuery Modialog plugin 1.2
+* jQuery Modialog plugin 1.2.1
 *
 * Copyright (c) 2011 Claudio Cicali <claudio.cicali@gmail.com
 *
@@ -98,6 +98,12 @@
       $dlg.find(sel).load(url, function() {
         $dlg.modialog('open');
         $dlg.modialog('center')
+        $dlg.find('.modialog-close').click(function(e) {
+          e.stopPropagation();
+          e.preventDefault();
+          $dlg.modialog('close')
+          return false
+        })     
         cb && cb.apply($dlg);
       })
       
