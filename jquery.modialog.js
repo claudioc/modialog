@@ -1,6 +1,5 @@
-
 /*
-* jQuery Modialog plugin 1.2.1
+* jQuery Modialog plugin 1.2.2
 *
 * Copyright (c) 2011 Claudio Cicali <claudio.cicali@gmail.com
 *
@@ -57,7 +56,11 @@
           close();
           return false;
         })
+        // Move the dialog as direct parent of body
+        this.appendTo('body')
       }
+      
+      return this;
     },
     
     set: function(overrides) {
@@ -70,6 +73,7 @@
       
       this.data('modialogOptions', options);
       
+      return this;
     },
     
     center: function() {
@@ -77,18 +81,21 @@
         return;
       }
       relocate(this);
+      return this;
     },
 
     lock: function() {
       var options = this.data('modialogOptions');
       options.locked = true;
       this.data('modialogOptions', options);
+      return this;
     },
     
     unlock: function() {
       var options = this.data('modialogOptions');
       options.locked = false;
       this.data('modialogOptions', options);
+      return this;
     },
     
     load: function(sel, url, cb) {
@@ -107,6 +114,7 @@
         cb && cb.apply($dlg);
       })
       
+      return this;
     },
     
     open: function(cb) {
@@ -115,7 +123,7 @@
         , options = this.data('modialogOptions');
 
       if (this.is(':visible')) {
-        return;
+        return this;
       }
       
       if ($current) {
@@ -185,14 +193,14 @@
   
   function close($dlg, force, cb) {
     if (!$dlg && !$current) {
-      return;
+      return this;
     }
 
     if (!$dlg && $current) {
       
       // We use $current when clicking on the overlay
       if (!$current.data('modialogOptions').closeWithClick) {
-        return;
+        return this;
       }
     }
     
@@ -201,7 +209,7 @@
     var options = $dlg.data('modialogOptions');
     
     if (!force && options.locked) {
-      return
+      return this;
     }
     
     if (options.closeWithEsc) {
@@ -215,6 +223,7 @@
     $current = null;
     trigger('onClose', $dlg);
     cb && cb.apply($dlg);
+    return this;
   }
 
   function relocate($dlg) {
@@ -243,4 +252,3 @@
   }
 
 })(jQuery);
-

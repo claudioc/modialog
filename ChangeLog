@@ -1,3 +1,8 @@
+2011-09-26 Claudio Cicali <claudio.cicali@gmail.com>
+
+  * Version 1.2.2 - The dialog is now correctly moved as a BODY's child.
+                    Forgot to "return this" in many contexts
+  
 2011-09-05 Claudio Cicali <claudio.cicali@gmail.com>
 
   * Version 1.2.1 - Now you can add the "modialog-close" class to any clickable element inside the content of a dialog. On click, the dialog will automatically close (for example: a "Cancel" link or button)
